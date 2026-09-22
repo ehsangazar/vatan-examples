@@ -67,30 +67,34 @@ Set one up once, in the console:
 3. Subscribe it to **batch.finished**.
 4. Copy the webhook id into your `.env` as `VATAN_WEBHOOK_ID`.
 
-Then `check_webhook.py` shows you what arrived:
+With the test receiver, Vatan holds the deliveries and you read them on the webhook's
+**Received** tab in the console. There is no API credential that reads them back: a
+gateway key cannot call the control plane, and a management key is scoped to issuing and
+revoking keys and nothing else. The console is the only way, and that is deliberate.
+
+To receive them in your own code, run `receive_webhook.py`:
 
 ```bash
-uv run python check_webhook.py
+uv run python receive_webhook.py     # listens on http://localhost:8787/
 ```
 
 ```
-batch.finished   evt_9a1c...   2 minutes ago   signature verified
-  batch     7f3a...
-  status    completed
-  counts    3000 total, 2988 completed, 12 failed
+batch.finished  evt_9a1c...  attempt 1
+  batch   7f3a...
+  model   google/gemini-3.1-flash-lite:batch
+  status  completed
+  counts  3,000 total, 2,988 completed, 12 failed
 ```
 
-Reading the deliveries back needs a **management key**, which is a different credential
-from your API key and is created at
-[vatan.one/admin/keys](https://vatan.one/admin/keys). Put it in `.env` as
-`VATAN_MANAGEMENT_KEY`. If you would rather not make one, the same deliveries are on the
-webhook's **Received** tab in the console, and this script will tell you that instead of
-failing.
+Point a webhook at that URL (through a tunnel, or run it somewhere public) and paste the
+signing secret into `.env` as `VATAN_WEBHOOK_SECRET`.
 
-When you point a webhook at your own server rather than the test receiver, verify the
-signature before trusting the body. Vatan signs with HMAC-SHA256 over
-`timestamp.body` and sends it as `x-vatan-signature`, with the timestamp in
-`x-vatan-timestamp`. `check_webhook.py` has the eight lines that do it.
+**Verify before you trust.** Vatan signs with HMAC-SHA256 over `timestamp.body` and sends
+it as `x-vatan-signature`, with the timestamp in `x-vatan-timestamp`. An endpoint that
+skips this is one anyone on the internet can post to, and `batch.finished` is a message
+that makes programs spend money. Check the age as well as the signature: a correctly
+signed delivery from last week is still a replay. `receive_webhook.py` does both, and
+answers 2xx before doing any work, because Vatan retries anything slow.
 
 ## What else the same client does
 
@@ -131,7 +135,7 @@ delete, with the limits and the input-versus-output rule.
 | --- | --- |
 | `make_requests.py` | Writes `reviews.jsonl`, one Gemini request per line, in the shape the batch API takes. |
 | `run_batch.py` | Uploads the file, creates the batch, waits for it, downloads the answers. |
-| `check_webhook.py` | Reads back what Vatan sent to your webhook, and verifies the signature. |
+| `receive_webhook.py` | A receiver for `batch.finished` that verifies the signature and refuses a replay. |
 
 ## Things worth knowing before you run a real job
 
