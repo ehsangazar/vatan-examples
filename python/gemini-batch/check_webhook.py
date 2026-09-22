@@ -89,12 +89,16 @@ def main() -> None:
 
         body = got.get("body")
         data = (json.loads(body) if isinstance(body, str) else body or {}).get("data", {})
-        counts = data.get("request_counts", {})
-        print(f"  batch     {data.get('id')}")
-        print(f"  status    {data.get('status')}")
+        # The counts sit directly on `data`, not under a `request_counts` object, and the
+        # batch is `batch_id`. Read off a real delivery rather than guessed from the
+        # Batch object, which does nest them.
+        print(f"  batch     {data.get('batch_id')}")
+        print(f"  model     {data.get('model')}")
+        # `api_status` is the Batch API's word; `status` is the database's older one.
+        print(f"  status    {data.get('api_status') or data.get('status')}")
         print(
-            f"  counts    {counts.get('total', 0):,} total, "
-            f"{counts.get('completed', 0):,} completed, {counts.get('failed', 0):,} failed"
+            f"  counts    {data.get('total', 0):,} total, "
+            f"{data.get('completed', 0):,} completed, {data.get('failed', 0):,} failed"
         )
         return
 
