@@ -75,7 +75,7 @@ def wait(c: genai.Client, name: str) -> types.BatchJob:
     """Poll until the batch stops moving.
 
     A batch has up to 24 hours, so a real job is told about by a webhook rather than
-    watched. See check_webhook.py. This polls because an example you can run in one
+    watched. See receive_webhook.py. This polls because an example you can run in one
     terminal is easier to follow.
     """
     delay, waited, last = 5, 0.0, None
