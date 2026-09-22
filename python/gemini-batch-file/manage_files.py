@@ -89,6 +89,11 @@ def main() -> None:
     # ── Download ──────────────────────────────────────────────────────────
     # The same call fetches a batch's OUTPUT file, which is the usual reason to
     # download anything. Vatan hands back Gemini-shaped result lines.
+    #
+    # Pass the NAME and not the File object. The SDK refuses a File whose
+    # download_uri is unset with "Only generated files can be downloaded", which
+    # is a client-side check that never reaches Vatan; the name goes straight
+    # through and the bytes come back.
     raw = c.files.download(file=uploaded.name)
     first = raw.decode().splitlines()[0]
     print(f"downloaded {len(raw)} bytes, first line: {first[:70]}...")
