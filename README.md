@@ -12,6 +12,7 @@ batch API behind the same credential.
 | Example | What it shows |
 | --- | --- |
 | [`python/gemini-batch`](python/gemini-batch) | Classify thousands of texts overnight at the batch price, using Google's own `google-genai` SDK pointed at Vatan. Covers Files, the batch API and a webhook for when the job finishes. |
+| [`python/files`](python/files) | Every Files operation on its own: upload, list, retrieve, download, delete. What a batch reads from and writes back to. |
 
 ## Before you start
 
