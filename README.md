@@ -42,6 +42,10 @@ A key carries its own budget and rate limit, so a key you give to an example scr
 a key that cannot spend more than you decided when you made it. Set a small budget on
 it and you can run these without watching.
 
+If a request could take the key past that budget, it is refused before it is sent and
+nothing is charged. Every example prints that refusal as a single line saying how much
+is left and what the request would have cost.
+
 ## Licence
 
 MIT. Take any of it.

@@ -17,7 +17,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 from google import genai
-from google.genai import types
+from google.genai import errors, types
 
 HERE = Path(__file__).parent
 MODEL = os.environ.get("VATAN_EMBED_MODEL", "google/gemini-embedding-2")
@@ -95,5 +95,21 @@ def main() -> None:
     print(f"the same document at 256 dimensions: {len(narrow)} numbers")
 
 
+def run(main_fn) -> None:
+    """Run an example and report a refusal the way the gateway wrote it.
+
+    The gateway explains itself in `error.message`: which key, how much
+    budget is left, what the request could have cost. A traceback buries
+    that under sixty lines of SDK internals, and the one line worth
+    reading is the last one.
+    """
+    try:
+        main_fn()
+    except errors.APIError as e:
+        sys.exit(f"\n{e.code}: {e.message}")
+    except KeyboardInterrupt:
+        sys.exit("\nstopped")
+
+
 if __name__ == "__main__":
-    main()
+    run(main)

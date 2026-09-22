@@ -16,7 +16,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 from google import genai
-from google.genai import types
+from google.genai import errors, types
 
 HERE = Path(__file__).parent
 
@@ -28,10 +28,14 @@ IMAGE_MODEL = os.environ.get("VATAN_IMAGE_MODEL", "openrouter/google/gemini-2.5-
 # Makes video. Priced per second AT EACH RESOLUTION, so a resolution is required.
 VIDEO_MODEL = os.environ.get("VATAN_VIDEO_MODEL", "openrouter/google/veo-3.1-lite")
 
-# A 16x16 red square, so the example needs no files beside it.
+# A 64x64 solid red square, so the example needs no files beside it. Every
+# pixel is exactly (220, 30, 30): checked by decoding it, not by eye. A test
+# image you have not decoded is a test that can pass for the wrong reason.
 RED_SQUARE = base64.b64decode(
-    "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAJ0lEQVR4nGP8z4AATAxUZ4"
-    "xqGNUwqmFUw6iGUQ2jGkY1jGoY1QAAmO4CAU9wJ1kAAAAASUVORK5CYII="
+    "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAT0lEQVR42u3P"
+    "QQkAAAgEsEty/UMZxgi+hcEKLNO+FgEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB"
+    "AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQGBywLPLIEA68ZURwAAAABJRU5ErkJg"
+    "gg=="
 )
 
 
@@ -94,9 +98,12 @@ def make_a_video(c: genai.Client) -> None:
     """
     print("\nmaking a video (this costs real money and takes a minute)")
     started = time.time()
+    # `source=` rather than `prompt=`: passing the prompt directly is deprecated
+    # in the SDK and warns on every run.
     op = c.models.generate_videos(
         model=VIDEO_MODEL,
-        prompt="A paper boat floating down a rain gutter, close up, grey daylight.",
+        source=types.GenerateVideosSource(
+            prompt="A paper boat floating down a rain gutter, close up, grey daylight."),
         config=types.GenerateVideosConfig(duration_seconds=4, aspect_ratio="16:9", resolution="720p"),
     )
     print(f"  operation {op.name}")
@@ -144,5 +151,21 @@ def main() -> None:
         print("\n(skipping video; pass --video to make one)")
 
 
+def run(main_fn) -> None:
+    """Run an example and report a refusal the way the gateway wrote it.
+
+    The gateway explains itself in `error.message`: which key, how much
+    budget is left, what the request could have cost. A traceback buries
+    that under sixty lines of SDK internals, and the one line worth
+    reading is the last one.
+    """
+    try:
+        main_fn()
+    except errors.APIError as e:
+        sys.exit(f"\n{e.code}: {e.message}")
+    except KeyboardInterrupt:
+        sys.exit("\nstopped")
+
+
 if __name__ == "__main__":
-    main()
+    run(main)

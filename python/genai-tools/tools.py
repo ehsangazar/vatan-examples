@@ -19,7 +19,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 from google import genai
-from google.genai import types
+from google.genai import errors, types
 
 HERE = Path(__file__).parent
 MODEL = os.environ.get("VATAN_MODEL", "google/gemini-3.1-flash-lite")
@@ -29,6 +29,18 @@ MODEL = os.environ.get("VATAN_MODEL", "google/gemini-3.1-flash-lite")
 STOCK = {"widget": 41, "gizmo": 0, "sprocket": 7}
 
 
+def lookup(product: str) -> int | None:
+    """Find a product however the model spelled it.
+
+    The model will hand you "widgets" when your keys say "widget". Take the
+    plural off before you decide something does not exist: a tool that answers
+    "we do not carry that" to a real product is worse than no tool, because the
+    model believes it and tells the customer.
+    """
+    name = product.strip().lower()
+    return STOCK.get(name) or STOCK.get(name.rstrip("s"))
+
+
 def stock_level(product: str) -> str:
     """How many of a product are in the warehouse.
 
@@ -36,7 +48,7 @@ def stock_level(product: str) -> str:
         product: the product name, for example "widget"
     """
     print(f"   [tool] stock_level({product!r})")
-    n = STOCK.get(product.lower())
+    n = lookup(product)
     return f"{product}: not a product we carry" if n is None else f"{product}: {n} in stock"
 
 
@@ -123,5 +135,21 @@ def main() -> None:
             print("     you would run it and send the result back as a functionResponse")
 
 
+def run(main_fn) -> None:
+    """Run an example and report a refusal the way the gateway wrote it.
+
+    The gateway explains itself in `error.message`: which key, how much
+    budget is left, what the request could have cost. A traceback buries
+    that under sixty lines of SDK internals, and the one line worth
+    reading is the last one.
+    """
+    try:
+        main_fn()
+    except errors.APIError as e:
+        sys.exit(f"\n{e.code}: {e.message}")
+    except KeyboardInterrupt:
+        sys.exit("\nstopped")
+
+
 if __name__ == "__main__":
-    main()
+    run(main)

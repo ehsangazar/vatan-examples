@@ -27,6 +27,11 @@ making a video (this costs real money and takes a minute)
 
 ## Worth knowing
 
+**The test image is a 64x64 solid red square, checked by decoding it.** An earlier
+version of this example carried a PNG that was not actually solid red, and the model
+answering "multicoloured" was correct while the example looked broken. A fixture you
+have not decoded is a test that can pass for the wrong reason.
+
 **An image comes back as a part, not as text.** Ask with `response_modalities` and walk
 `candidates[0].content.parts` for `inline_data`. Reading `.text` and wondering where
 the picture went is the usual first mistake.
@@ -42,6 +47,11 @@ the bytes when it is done. Minutes, not seconds.
 occasionally answer 502 while the job carries on rendering. This example tolerates
 three in a row before giving up, and prints the operation name so you can come back to
 it. A loop that dies on the first bad poll will lose work you have paid for.
+
+**A refusal prints as one line, not a traceback.** Every example here catches
+`errors.APIError` and prints what the gateway said. Run out of key budget and you get
+"this key has $0.11 left and this request could cost up to $0.34, so it was not sent",
+which tells you what to do; the traceback underneath it does not.
 
 **Video is charged when a poll first sees it finished.** A job nobody polls is a job
 nobody is charged for, and also one nobody can download.
