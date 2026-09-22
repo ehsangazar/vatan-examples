@@ -1,4 +1,4 @@
-# Files on Vatan, with the google-genai SDK
+# Batch files on Vatan, with the google-genai SDK
 
 Upload, list, retrieve, download and delete, in one script you can read top to
 bottom.

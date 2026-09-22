@@ -1,5 +1,5 @@
 [project]
-name = "vatan-files"
+name = "vatan-gemini-batch-file"
 version = "1.0.0"
 description = "The whole Files lifecycle on Vatan with the genai SDK"
 requires-python = ">=3.10"
