@@ -113,7 +113,7 @@ def main() -> None:
 
     # ── A list of them ────────────────────────────────────────────────────
     # The same thing over many inputs. For thousands of these, do it as a batch
-    # at half the price: see ../gemini-batch.
+    # at half the price: see ../genai-batch.
     many = c.models.generate_content(
         model=MODEL,
         contents="Invent three short product reviews and extract each one.",

@@ -1,5 +1,5 @@
 [project]
-name = "vatan-tools"
+name = "vatan-genai-tools"
 version = "1.0.0"
 description = "A tools example for Vatan with Google's genai SDK"
 requires-python = ">=3.10"

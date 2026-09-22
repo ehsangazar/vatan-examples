@@ -35,4 +35,4 @@ inventing a fourth category, which is the common failure when you ask for a labe
 prose.
 
 **For thousands of these, run them as a batch** at roughly half the price. See
-[`../gemini-batch`](../gemini-batch).
+[`../genai-batch`](../genai-batch).

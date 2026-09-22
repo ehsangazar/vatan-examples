@@ -1,7 +1,7 @@
 [project]
-name = "vatan-media"
+name = "vatan-genai-chat"
 version = "1.0.0"
-description = "A media example for Vatan with Google's genai SDK"
+description = "A chat example for Vatan with Google's genai SDK"
 requires-python = ">=3.10"
 dependencies = [
     "google-genai>=2.0.0",

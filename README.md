@@ -11,13 +11,13 @@ batch API behind the same credential.
 
 | Example | What it shows |
 | --- | --- |
-| [`python/chat`](python/chat) | Start here. One answer, a system instruction, streaming, a conversation that remembers, counting tokens before you send, and what a truncated answer looks like. |
-| [`python/tools`](python/tools) | Let the model call your own Python functions: one tool, two calls in one turn, two tools chained, and declaring a tool by hand. Includes the `from __future__` import that silently breaks all of it. |
-| [`python/structured-output`](python/structured-output) | JSON back in a shape you decided, three ways: a Pydantic class, a plain schema, and a bare JSON instruction. |
-| [`python/embeddings`](python/embeddings) | Search that works on meaning rather than matching words, with the gap between first and second place as your confidence signal. |
-| [`python/media`](python/media) | Reading an image, drawing one, and making a video, including how to poll a long job without losing work you have paid for. |
-| [`python/gemini-batch`](python/gemini-batch) | Classify thousands of texts overnight at the batch price. Covers Files, the batch API and a webhook for when the job finishes. |
-| [`python/gemini-batch-file`](python/gemini-batch-file) | Every Files operation on its own: upload, list, retrieve, download, delete. What a batch reads from and writes back to. |
+| [`python/genai-chat`](python/genai-chat) | Start here. One answer, a system instruction, streaming, a conversation that remembers, counting tokens before you send, and what a truncated answer looks like. |
+| [`python/genai-tools`](python/genai-tools) | Let the model call your own Python functions: one tool, two calls in one turn, two tools chained, and declaring a tool by hand. Includes the `from __future__` import that silently breaks all of it. |
+| [`python/genai-structured-output`](python/genai-structured-output) | JSON back in a shape you decided, three ways: a Pydantic class, a plain schema, and a bare JSON instruction. |
+| [`python/genai-embeddings`](python/genai-embeddings) | Search that works on meaning rather than matching words, with the gap between first and second place as your confidence signal. |
+| [`python/genai-media`](python/genai-media) | Reading an image, drawing one, and making a video, including how to poll a long job without losing work you have paid for. |
+| [`python/genai-batch`](python/genai-batch) | Classify thousands of texts overnight at the batch price. Covers Files, the batch API and a webhook for when the job finishes. |
+| [`python/genai-batch-file`](python/genai-batch-file) | Every Files operation on its own: upload, list, retrieve, download, delete. What a batch reads from and writes back to. |
 
 Every one of them uses Google's own `google-genai` SDK unchanged. The only
 Vatan-specific line in any of these files is the base URL:

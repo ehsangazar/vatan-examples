@@ -1,12 +1,11 @@
 [project]
-name = "vatan-gemini-batch-file"
+name = "vatan-genai-media"
 version = "1.0.0"
-description = "The whole Files lifecycle on Vatan with the genai SDK"
+description = "A media example for Vatan with Google's genai SDK"
 requires-python = ">=3.10"
 dependencies = [
     "google-genai>=2.0.0",
     "python-dotenv>=1.0.0",
-    "httpx>=0.27.0",
 ]
 
 [tool.uv]

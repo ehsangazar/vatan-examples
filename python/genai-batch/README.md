@@ -126,7 +126,7 @@ Vatan has no way to pass it through, and silently ignoring it would leave you
 believing a filter had been changed when it had not.
 
 The file side of this, on its own, is in
-[`../gemini-batch-file`](../gemini-batch-file): upload, list, retrieve, download and
+[`../genai-batch-file`](../genai-batch-file): upload, list, retrieve, download and
 delete, with the limits and the input-versus-output rule.
 
 ## What the files are

@@ -60,4 +60,4 @@ read its existence as a sign that something went wrong.
 
 A finished batch publishes two of them, an output file and an error file, and
 both are downloaded with the same `client.files.download()` this script uses. See
-[`../gemini-batch`](../gemini-batch) for the whole loop.
+[`../genai-batch`](../genai-batch) for the whole loop.
