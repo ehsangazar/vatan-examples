@@ -11,8 +11,26 @@ batch API behind the same credential.
 
 | Example | What it shows |
 | --- | --- |
-| [`python/gemini-batch`](python/gemini-batch) | Classify thousands of texts overnight at the batch price, using Google's own `google-genai` SDK pointed at Vatan. Covers Files, the batch API and a webhook for when the job finishes. |
+| [`python/chat`](python/chat) | Start here. One answer, a system instruction, streaming, a conversation that remembers, counting tokens before you send, and what a truncated answer looks like. |
+| [`python/tools`](python/tools) | Let the model call your own Python functions: one tool, two calls in one turn, two tools chained, and declaring a tool by hand. Includes the `from __future__` import that silently breaks all of it. |
+| [`python/structured-output`](python/structured-output) | JSON back in a shape you decided, three ways: a Pydantic class, a plain schema, and a bare JSON instruction. |
+| [`python/embeddings`](python/embeddings) | Search that works on meaning rather than matching words, with the gap between first and second place as your confidence signal. |
+| [`python/media`](python/media) | Reading an image, drawing one, and making a video, including how to poll a long job without losing work you have paid for. |
+| [`python/gemini-batch`](python/gemini-batch) | Classify thousands of texts overnight at the batch price. Covers Files, the batch API and a webhook for when the job finishes. |
 | [`python/gemini-batch-file`](python/gemini-batch-file) | Every Files operation on its own: upload, list, retrieve, download, delete. What a batch reads from and writes back to. |
+
+Every one of them uses Google's own `google-genai` SDK unchanged. The only
+Vatan-specific line in any of these files is the base URL:
+
+```python
+client = genai.Client(
+    api_key=os.environ["VATAN_API_KEY"],
+    http_options={"base_url": "https://gateway.vatan.one"},
+)
+```
+
+Point that at Vatan and the same code reaches every model Vatan carries, not only
+Google's, with one key and one bill.
 
 ## Before you start
 

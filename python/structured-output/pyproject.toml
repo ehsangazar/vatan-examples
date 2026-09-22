@@ -1,0 +1,13 @@
+[project]
+name = "vatan-structured-output"
+version = "1.0.0"
+description = "A structured-output example for Vatan with Google's genai SDK"
+requires-python = ">=3.10"
+dependencies = [
+    "google-genai>=2.0.0",
+    "python-dotenv>=1.0.0",
+    "pydantic>=2.0.0",
+]
+
+[tool.uv]
+package = false
