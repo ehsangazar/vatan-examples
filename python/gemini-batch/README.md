@@ -92,6 +92,35 @@ signature before trusting the body. Vatan signs with HMAC-SHA256 over
 `timestamp.body` and sends it as `x-vatan-signature`, with the timestamp in
 `x-vatan-timestamp`. `check_webhook.py` has the eight lines that do it.
 
+## What else the same client does
+
+Batches are what this example is about, but the base URL change is not
+batch-specific. The same client reaches the rest of the Gemini API against
+Vatan:
+
+```python
+client.models.generate_content(model="google/gemini-3.1-flash-lite", contents="...")
+client.models.generate_content_stream(...)        # streaming
+client.models.count_tokens(...)                   # Google's own counter, not an estimate
+client.models.embed_content(model="google/gemini-embedding-2", contents=[...])
+client.models.generate_videos(model="openrouter/bytedance/seedance-2.0", prompt="...")
+client.chats.create(model="...").send_message("...")
+client.files.upload(...) / get / list / delete / download
+```
+
+Tool calling, structured output through `response_schema`, system instructions
+and image input all come through as well.
+
+A few things Google's SDK can ask for are not served here, and each one says so
+with a sentence rather than a bare 404: `caches` (context caching), `tunings`
+(fine-tuning), `auth_tokens` and `file_search_stores`. The Live API needs a
+realtime connection Vatan does not serve.
+
+Anything Vatan cannot honour faithfully is refused by name rather than dropped.
+`safetySettings` is the one most people hit: it changes what the model returns,
+Vatan has no way to pass it through, and silently ignoring it would leave you
+believing a filter had been changed when it had not.
+
 ## What the files are
 
 | File | What it does |
