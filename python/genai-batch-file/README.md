@@ -85,9 +85,34 @@ for f in files_page:          # follows nextPageToken, so this is every page
 you get 50. Iterating the pager follows `nextPageToken` for you, so you see every
 file, not only the first page.
 
-**The display name is the filename you uploaded.** Vatan names a file after the
-file on disk, and the `display_name` in `UploadFileConfig` does not override it.
-Name your batch inputs with a prefix and `--prefix` finds them.
+**The display name is the one you chose.** Set `display_name` in
+`UploadFileConfig` and that is the file's name, as it is on Google. Leave it out
+and the file is named after the file on disk. Name your batch inputs with a
+prefix and `--prefix` finds them.
+
+**You choose how long a file is kept.** A file is kept 30 days unless you say
+otherwise. `UploadFileConfig` has no field for it, so Vatan reads a header,
+`x-vatan-expires-after`, in seconds from 3600 (an hour) to 2592000 (30 days).
+Put it on the client: the SDK replaces any headers you set on
+`UploadFileConfig.http_options` with its own upload headers, so they never
+arrive.
+
+```python
+short = genai.Client(
+    api_key=os.environ["VATAN_API_KEY"],
+    http_options={
+        "base_url": "https://gateway.vatan.one",
+        "headers": {"x-vatan-expires-after": "3600"},   # kept one hour
+    },
+)
+short.files.upload(
+    file="nightly-2026-09-27.jsonl",
+    config=types.UploadFileConfig(display_name="nightly-2026-09-27", mime_type="application/jsonl"),
+)
+```
+
+Every other call ignores the header, so a client that carries it changes only
+its uploads.
 
 **List first, delete after.** The script collects every page before deleting
 anything. Deleting while you walk the pages happens to work on Vatan, but it

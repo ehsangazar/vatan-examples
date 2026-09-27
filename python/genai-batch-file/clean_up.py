@@ -2,9 +2,10 @@
 
 Files count against a storage quota, so a workspace that runs batches every
 night fills up with input files nobody needs. This lists them a page at a time
-and deletes the ones whose display name starts with the prefix you give. On
-Vatan a file's display name is the name of the file you uploaded, so name your
-batch inputs `nightly-2026-09-27.jsonl` and `--prefix nightly-` finds them.
+and deletes the ones whose display name starts with the prefix you give. A
+file's display name is the `display_name` you set in `UploadFileConfig`, or the
+name of the file you uploaded when you set none, so name your batch inputs
+`nightly-2026-09-27` and `--prefix nightly-` finds them.
 
     uv run python clean_up.py                          # list only, deletes nothing
     uv run python clean_up.py --prefix nightly- --delete
@@ -23,7 +24,7 @@ from manage_files import client, run
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--prefix", default="", help="only files whose display name (the uploaded filename) starts with this")
+    parser.add_argument("--prefix", default="", help="only files whose display name (display_name, else the uploaded filename) starts with this")
     parser.add_argument("--page-size", type=int, default=100, help="files per page, 1 to 100 (default 100)")
     parser.add_argument("--delete", action="store_true", help="delete them; without this nothing is removed")
     args = parser.parse_args()
