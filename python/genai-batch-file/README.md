@@ -56,6 +56,43 @@ so cleaning up an input never costs you the answers.
 **The error file is empty when nothing failed.** It is always created, so do not
 read its existence as a sign that something went wrong.
 
+## Cleaning up: every page, then delete
+
+`clean_up.py` walks every file in the workspace a page at a time and deletes the
+ones whose name starts with a prefix. Without `--delete` it only lists.
+
+```bash
+uv run python clean_up.py                                  # list only
+uv run python clean_up.py --prefix nightly- --delete       # remove them
+```
+
+```
+listed     23 file(s), 3 match prefix 'nightly-'
+             files/file-4b18...  nightly-2026-09-25.jsonl  358 bytes  2026-09-25
+             ...
+deleted    files/file-4b18...
+```
+
+The two calls it is built on:
+
+```python
+files_page = client.files.list(config=types.ListFilesConfig(page_size=100))
+for f in files_page:          # follows nextPageToken, so this is every page
+    client.files.delete(name=f.name)
+```
+
+**`page_size` goes up to 100.** Ask for more and you get 100; leave it out and
+you get 50. Iterating the pager follows `nextPageToken` for you, so you see every
+file, not only the first page.
+
+**The display name is the filename you uploaded.** Vatan names a file after the
+file on disk, and the `display_name` in `UploadFileConfig` does not override it.
+Name your batch inputs with a prefix and `--prefix` finds them.
+
+**List first, delete after.** The script collects every page before deleting
+anything. Deleting while you walk the pages happens to work on Vatan, but it
+skips files on APIs that page by offset.
+
 ## Where files come from, other than you
 
 A finished batch publishes two of them, an output file and an error file, and

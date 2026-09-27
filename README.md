@@ -17,7 +17,7 @@ batch API behind the same credential.
 | [`python/genai-embeddings`](python/genai-embeddings) | Search that works on meaning rather than matching words, with the gap between first and second place as your confidence signal. |
 | [`python/genai-media`](python/genai-media) | Reading an image, drawing one, and making a video, including how to poll a long job without losing work you have paid for. |
 | [`python/genai-batch`](python/genai-batch) | Classify thousands of texts overnight at the batch price. Covers Files, the batch API and a webhook for when the job finishes. |
-| [`python/genai-batch-file`](python/genai-batch-file) | Every Files operation on its own: upload, list, retrieve, download, delete. What a batch reads from and writes back to. |
+| [`python/genai-batch-file`](python/genai-batch-file) | Every Files operation on its own: upload, list, retrieve, download, delete. What a batch reads from and writes back to, and a clean-up script that pages through every file and deletes by prefix. |
 
 Every one of them uses Google's own `google-genai` SDK unchanged. The only
 Vatan-specific line in any of these files is the base URL:
