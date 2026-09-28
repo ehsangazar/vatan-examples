@@ -148,9 +148,10 @@ examples set, keeps the amount held against your balance small.
 as `google/gemini-3.1-flash-lite` at the batch price. Using the plain id in a batch is
 refused rather than quietly charged at the live price.
 
-**A batch cannot be stopped once it has reached the provider.** Cancel works up to that
-point. After it, the job finishes and is charged, so the useful safety net is a budget on
-the key rather than a cancel button.
+**A batch can be stopped after it has reached Google, on a best-effort basis.** Cancel it
+and it reads as cancelling until Google ends the job. You are charged only for the requests
+that finished before it stopped, and Google may still finish the whole job first, in which
+case it is charged in full. A budget on the key remains the firmer safety net.
 
 **Results come back keyed, not ordered.** Each line carries the `key` you put on the
 request. Match on that rather than on position.
