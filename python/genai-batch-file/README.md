@@ -46,8 +46,9 @@ explains what you see on the network.
 cannot be parsed, or a request Vatan cannot run, is refused at upload with the
 line number on it. That is the last moment you can fix it for free.
 
-**The limits.** Up to 100 MB per file and 10,000 requests per batch file. Both
-are refused before anything is stored.
+**The limits.** Up to 1,400 MB and 100,000 requests per file, both refused
+before anything is stored. A Google batch can use the whole file; a batch for
+any other provider holds at most 25 MB of requests.
 
 **Input files are yours, output files belong to the batch.** Delete your input
 when you are done with it. A batch's output and error files stay with the batch,
