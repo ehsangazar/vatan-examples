@@ -39,8 +39,8 @@ def write_sample(lines: int = 5) -> int:
     """A batch input file: one request per line, each with your own key.
 
     `maxOutputTokens` is on every request because a batch is checked against your
-    balance before it is sent, and the worst case cannot be worked out without a
-    bound on the output.
+    balance at each request's bound, and without one that bound is the model's own
+    maximum output.
     """
     with SAMPLE.open("w") as f:
         for i in range(1, lines + 1):

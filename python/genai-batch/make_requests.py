@@ -5,8 +5,8 @@ ordinary Gemini GenerateContentRequest. The model is not in the line: it is name
 on the job, when the batch is created.
 
 `maxOutputTokens` is on every request on purpose. Vatan checks a batch against your
-balance before sending it, and the worst case cannot be worked out without a bound on
-the output, so a request without one is refused when the batch is created.
+balance before sending it, at each request's bound. A request without one runs under
+the model's own maximum output and is priced at it, so a small bound keeps the check small.
 """
 
 from __future__ import annotations

@@ -139,9 +139,10 @@ delete, with the limits and the input-versus-output rule.
 
 ## Things worth knowing before you run a real job
 
-**Every request needs `maxOutputTokens`.** A batch is checked against your balance before
-it is sent, and the worst case cannot be worked out without a bound on the output. A
-request without one is refused when you create the batch, naming the line it is on.
+**`maxOutputTokens` sets the worst case.** A batch is checked against your balance before
+it is sent, at each request's bound. A request without `maxOutputTokens` runs under the
+model's own maximum output and is priced at that maximum, so a small bound, as these
+examples set, keeps the amount held against your balance small.
 
 **The model id ends in `:batch`.** `google/gemini-3.1-flash-lite:batch` is the same model
 as `google/gemini-3.1-flash-lite` at the batch price. Using the plain id in a batch is
