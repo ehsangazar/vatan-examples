@@ -34,7 +34,8 @@ truncated  : FinishReason.MAX_TOKENS
 ## Worth knowing
 
 **`count_tokens` is Google's own counter**, not an estimate, so it is the number you
-will be charged for. It is free.
+will be charged for. It is free. If the counter cannot be reached the gateway
+answers 503 instead of guessing, and the example prints that and carries on.
 
 **A conversation is charged for its whole history, every turn.** `chats` resends
 everything so the model can refer back, which is what makes it feel like a

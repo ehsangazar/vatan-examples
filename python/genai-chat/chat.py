@@ -78,9 +78,16 @@ def main() -> None:
 
     # ── Counting before you send ──────────────────────────────────────────
     # Answered by Google's own counter, so it is the number that will be
-    # charged rather than an estimate.
-    counted = c.models.count_tokens(model=MODEL, contents="How many tokens is this sentence?")
-    print("count      :", counted.total_tokens, "tokens")
+    # charged rather than an estimate. When that counter cannot be reached the
+    # gateway answers 503 rather than guess, and the completion itself still
+    # works, so treat a 503 here as "no count right now", not as a failure.
+    try:
+        counted = c.models.count_tokens(model=MODEL, contents="How many tokens is this sentence?")
+        print("count      :", counted.total_tokens, "tokens")
+    except errors.ServerError as e:
+        if e.code != 503:
+            raise
+        print("count      : unavailable right now (503), carrying on")
 
     # ── When the answer is cut off ────────────────────────────────────────
     # A short budget stops mid-sentence and says so. Check finish_reason before
